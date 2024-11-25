@@ -47,6 +47,13 @@ void    *philo_routine(void *arg)
         ft_usleep(philo->data->time_to_eat * 0.9 + 1);
     while (!(philo->over_philo) && !(philo->data->over))
     {
+        pthread_mutex_lock(&philo->data->death_lock);
+        if (philo->data->over)
+        {
+            pthread_mutex_unlock(&philo->data->death_lock);
+            return (NULL);
+        }
+        pthread_mutex_unlock(&philo->data->death_lock);
         routine_eat(philo);
         if (philo->data->num_philos == 1)
             return (NULL);
