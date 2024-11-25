@@ -8,7 +8,7 @@ void    print_status(t_philo *philo, char *message)
         pthread_mutex_unlock(&philo->data->print_lock);
         return ;
     }
-    printf("%ldms %d %s\n", current_time_in_ms() - philo->data->start_time, philo->id, message);
+    printf("%ld %d %s\n", current_time_in_ms() - philo->data->start_time, philo->id, message);
     pthread_mutex_unlock(&philo->data->print_lock);
 }
 
@@ -16,6 +16,11 @@ void    routine_eat(t_philo *philo)
 {
     pthread_mutex_lock(philo->left_fork);
     print_status(philo, FORK);
+    if (philo->data->num_philos == 1)
+    {
+        pthread_mutex_unlock(philo->left_fork);
+        return ;
+    }
     pthread_mutex_lock(philo->right_fork);
     print_status(philo, FORK);
     philo->last_meal_time = current_time_in_ms();
@@ -43,12 +48,11 @@ void    *philo_routine(void *arg)
     while (!(philo->over_philo) && !(philo->data->over))
     {
         routine_eat(philo);
+        if (philo->data->num_philos == 1)
+            return (NULL);
         routine_sleep_think(philo);
         if (philo->meals_eaten == philo->data->must_eat_count)
-        {
-            printf("%ld %d já comeu %d vezes\n", current_time_in_ms() - philo->data->start_time, philo->id, philo->data->must_eat_count);
             philo->over_philo = 1;
-        }
     }
     return (NULL);
 }

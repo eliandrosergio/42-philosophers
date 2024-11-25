@@ -20,7 +20,7 @@ void    init_mutex(t_data *data)
     data->forks = malloc(sizeof(pthread_mutex_t) * data->num_philos);
     data->philos = malloc(sizeof(t_philo) * data->num_philos);
     if (!data->forks || !data->philos)
-        ft_exit ("Falha ao alocar a memória", data, 1);
+        ft_exit ("Failed to allocate memory", data, 1);
     while (++i < data->num_philos)
         pthread_mutex_init(&data->forks[i], NULL);
     pthread_mutex_init(&data->print_lock, NULL);
@@ -55,12 +55,12 @@ void    init_thread(t_data *data)
     {
         data->philos[i].right_fork = data->philos[(i + 1) % data->num_philos].left_fork;
         if (pthread_create(&data->philos[i].thread, NULL, philo_routine, &data->philos[i]) != 0)
-            ft_exit ("Falha ao criar o thread do(s) filósofo(s)", data, 1);
+            ft_exit("Failed to create philosopher(s) thread", data, 1);
     }
     if (pthread_create(&monitor, NULL, monitor_routine, data) != 0)
     {
         data->over = 1;
-        ft_exit ("Falha ao criar o thread de monitoramento", data, 1);
+        ft_exit("Failed to create monitoring thread", data, 1);
     }
     pthread_join(monitor, NULL);
 }

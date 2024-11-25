@@ -7,12 +7,11 @@
 # include <unistd.h>
 # include <sys/time.h>
 
-# define EAT "esta comendo 😋️"
-# define SLEEP "esta dormindo 😪️"
-# define THINK "esta pensando 😣️"
-# define FORK "pegou um garfo 🍽️"
-# define DIE "foi de base 😵️"
-# define DEVIL "Parece que hoje ninguém morreu, infelizmente 😈️\n"
+# define EAT "is eating"
+# define SLEEP "is sleeping"
+# define THINK "is thinking"
+# define FORK "has taken a fork"
+# define DIE "died"
 
 
 typedef struct s_philo {
@@ -52,8 +51,6 @@ void        init_philo(t_data *data);
 void        init_thread(t_data *data);
 void        *philo_routine(void *arg);
 void        *monitor_routine(void *arg);
-void        check_up_forks(t_philo *philo);
-void        put_down_forks(t_philo *philo);
 void        ft_exit(char *str, t_data *data, int i);
 void        init_data(t_data *data, int ac, char **av);
 void        print_status(t_philo *philo, char *message);

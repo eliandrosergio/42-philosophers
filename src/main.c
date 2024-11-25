@@ -1,9 +1,10 @@
 #include "../includes/philo.h"
 
-void    cleanup(t_data *data) {
+void    cleanup(t_data *data)
+{
     int     i;
 
-    i = 0;
+    i = -1;
     while (++i < data->num_philos)
         pthread_join(data->philos[i].thread, (void *)&data->philos[i]);
     pthread_mutex_destroy(&data->print_lock);
@@ -14,10 +15,12 @@ void    cleanup(t_data *data) {
 
 void    ft_exit(char *str, t_data *data, int nbr_exit)
 {
-    cleanup(data);
+    if (data)
+        cleanup(data);
     if (*str)
         printf("Erro\n%s\n", str);
-    exit (nbr_exit);
+    if (nbr_exit)
+        exit (nbr_exit);
 }
 
 int     main(int ac, char **av)

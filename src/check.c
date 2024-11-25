@@ -27,16 +27,16 @@ int     args_check(int ac, char **av)
             i++;
         if (i != ac)
         {
-            printf("Erro\nArgumento(s) inválidos\n");
+            ft_exit("Invalid argument(s)", 0, 0);
             return (1);
         }
         if (ft_atoi(av[1]) <= 0)
         {
-            printf("Erro\nNúmero de filósofos inválido\n");
+            ft_exit("Invalid number of philosophers", 0, 0);
             return (1);
         }
         return (0);
     }
-    printf("Erro\nNúmero de argumentos inválido\n");
+    ft_exit("Invalid number of arguments", 0, 0);
     return (1);
 }

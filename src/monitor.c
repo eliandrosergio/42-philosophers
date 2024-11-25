@@ -1,13 +1,5 @@
 #include "../includes/philo.h"
 
-void    monitor_philos_eaten(t_data *data)
-{
-    ft_usleep(5 * data->num_philos);
-    printf("Todos os filósofos já comeram %d vezes\n", data->must_eat_count);
-    printf(DEVIL);
-    data->over = 1;
-}
-
 void    monitor_philo_died(t_data *data, int i)
 {
     print_status(&data->philos[i], DIE);
@@ -33,10 +25,7 @@ int    monitor_aux(t_data *data, int i)
         }
     }
     if (data->philos[data->num_philos - 1].meals_eaten == data->must_eat_count)
-    {
-        monitor_philos_eaten(data);
         return (1);
-    }
     return (0);
 }
 
