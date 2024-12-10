@@ -28,7 +28,7 @@ O objetivo é implementar uma solução eficiente e conforme as regras, garantin
 
 1. Clone o repositório:
    ```bash
-   git clone https://github.com/seu_usuario/philosophers.git
+   git clone https://github.com/eliandrosergio/philosophers.git
    cd philosophers
    make
    ./philo <número_de_filósofos> <tempo_para_morrer> <tempo_para_comer> <tempo_para_pensar> [número_de_vezes_para_comer]
