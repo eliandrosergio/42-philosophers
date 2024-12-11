@@ -19,17 +19,11 @@
 # include <unistd.h>
 # include <sys/time.h>
 
-# define EAT "is eating"
-# define SLEEP "is sleeping"
-# define THINK "is thinking"
-# define FORK "has taken a fork"
-# define DIE "died"
-
 typedef struct s_philo
 {
 	int				id;
-	int				meals_eaten;
-	long			last_meal_time;
+	int				eaten_count;
+	long			last_eat_time;
 	pthread_t		thread;
 	pthread_mutex_t	*left_fork;
 	pthread_mutex_t	*right_fork;
@@ -38,16 +32,18 @@ typedef struct s_philo
 
 typedef struct s_data
 {
+	int				over;
 	int				num_philos;
 	int				time_to_die;
 	int				time_to_eat;
 	int				time_to_sleep;
-	int				must_eat_count;
-	int				over;
+	int				total_eat_count;
+	int				finished_eating;
 	long int		start_time;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	print_lock;
 	pthread_mutex_t	death_lock;
+	pthread_mutex_t	aux_lock;
 	t_philo			*philos;
 }	t_data;
 

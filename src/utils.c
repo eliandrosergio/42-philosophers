@@ -18,7 +18,7 @@ void	ft_usleep(long int time)
 
 	start_time = current_time_in_ms();
 	while ((current_time_in_ms() - start_time) < time)
-		usleep(150);
+		usleep(100);
 }
 
 int	ft_isdigit(int c)

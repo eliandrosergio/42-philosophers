@@ -23,7 +23,7 @@ void	print_argerro(int id)
 	else if (id == 4)
 		ft_exit("Invalid number of time_to_sleep (>= 1)", 0, 0);
 	else if (id == 5)
-		ft_exit("Invalid number of must_eat_count (>= 1)", 0, 0);
+		ft_exit("Invalid number of total_eat_count (>= 1)", 0, 0);
 }
 
 int	check_number(char *str, int id, int i)

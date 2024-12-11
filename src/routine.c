@@ -6,7 +6,7 @@
 /*   By: efaustin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 16:10:29 by efaustin          #+#    #+#             */
-/*   Updated: 2024/12/10 10:29:04 by efaustin         ###   ########.fr       */
+/*   Updated: 2024/12/10 12:00:00 by efaustin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,29 +29,36 @@ void	print_status(t_philo *philo, char *message)
 
 void	routine_eat(t_philo *philo)
 {
+	pthread_mutex_lock(&philo->data->aux_lock);
 	pthread_mutex_lock(philo->left_fork);
-	print_status(philo, FORK);
+	print_status(philo, "has taken a fork");
 	if (philo->data->num_philos == 1)
 	{
 		ft_usleep(philo->data->time_to_die);
 		pthread_mutex_unlock(philo->left_fork);
+		pthread_mutex_unlock(&philo->data->aux_lock);
 		return ;
 	}
 	pthread_mutex_lock(philo->right_fork);
-	print_status(philo, FORK);
-	philo->last_meal_time = current_time_in_ms();
-	print_status(philo, EAT);
+	print_status(philo, "has taken a fork");
+	philo->last_eat_time = current_time_in_ms();
+	philo->eaten_count++;
+	if (philo->eaten_count == philo->data->total_eat_count)
+		philo->data->finished_eating++;
+	print_status(philo, "is eating");
 	ft_usleep(philo->data->time_to_eat);
-	philo->meals_eaten++;
 	pthread_mutex_unlock(philo->left_fork);
 	pthread_mutex_unlock(philo->right_fork);
+	pthread_mutex_unlock(&philo->data->aux_lock);
 }
 
 void	routine_sleep_think(t_philo *philo)
 {
-	print_status(philo, SLEEP);
+	print_status(philo, "is sleeping");
+	pthread_mutex_lock(&philo->data->aux_lock);
 	ft_usleep(philo->data->time_to_sleep);
-	print_status(philo, THINK);
+	pthread_mutex_unlock(&philo->data->aux_lock);
+	print_status(philo, "is thinking");
 }
 
 void	*philo_routine(void *arg)
@@ -59,20 +66,27 @@ void	*philo_routine(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
+	pthread_mutex_lock(&philo->data->aux_lock);
 	if (philo->id % 2)
 		ft_usleep(1);
+	pthread_mutex_unlock(&philo->data->aux_lock);
 	while (!(philo->data->over))
 	{
-		pthread_mutex_lock(&philo->data->death_lock);
+		pthread_mutex_lock(&philo->data->aux_lock);
 		if (philo->data->over)
 		{
-			pthread_mutex_unlock(&philo->data->death_lock);
+			pthread_mutex_unlock(&philo->data->aux_lock);
 			return (NULL);
 		}
-		pthread_mutex_unlock(&philo->data->death_lock);
+		pthread_mutex_unlock(&philo->data->aux_lock);
 		routine_eat(philo);
+		pthread_mutex_lock(&philo->data->aux_lock);
 		if (philo->data->num_philos == 1)
+		{
+			pthread_mutex_unlock(&philo->data->aux_lock);
 			return (NULL);
+		}
+		pthread_mutex_unlock(&philo->data->aux_lock);
 		routine_sleep_think(philo);
 	}
 	return (NULL);

@@ -21,6 +21,7 @@ void	cleanup(t_data *data)
 		pthread_join(data->philos[i].thread, NULL);
 	pthread_mutex_destroy(&data->print_lock);
 	pthread_mutex_destroy(&data->death_lock);
+	pthread_mutex_destroy(&data->aux_lock);
 	free(data->forks);
 	free(data->philos);
 }
