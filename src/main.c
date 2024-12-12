@@ -6,47 +6,64 @@
 /*   By: efaustin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 16:10:29 by efaustin          #+#    #+#             */
-/*   Updated: 2024/12/10 10:28:50 by efaustin         ###   ########.fr       */
+/*   Updated: 2024/12/12 16:11:36 by efaustin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/philo.h"
+#include "../include/philo.h"
 
-void	cleanup(t_data *data)
+void	deinit_structs(t_state *state)
 {
-	int		i;
+	int	i;
 
-	i = -1;
-	while (++i < data->num_philos)
-		pthread_join(data->philos[i].thread, NULL);
-	pthread_mutex_destroy(&data->print_lock);
-	pthread_mutex_destroy(&data->death_lock);
-	pthread_mutex_destroy(&data->aux_lock);
-	free(data->forks);
-	free(data->philos);
-}
-
-void	ft_exit(char *str, t_data *data, int nbr_exit)
-{
-	if (*str)
-		printf("Error\n%s\n", str);
-	if (data)
-		cleanup(data);
-	if (nbr_exit)
-		exit (nbr_exit);
-}
-
-int	main(int ac, char **av)
-{
-	t_data	data;
-
-	if (!args_check(ac, av))
+	i = 0;
+	while (i < state->number_of_philosophers)
 	{
-		init_data(&data, ac, av);
-		init_mutex(&data);
-		init_philo(&data);
-		init_thread(&data);
-		cleanup(&data);
+		pthread_mutex_destroy(&state->p_philos[i].mutex);
+		i++;
 	}
+	pthread_mutex_destroy(&state->p_dead->mutex);
+	free(state->p_philos);
+	free(state->p_forks);
+	free(state->p_dead);
+}
+
+int	init(t_state *state, int argc, char **argv)
+{
+	if (init_arguments(state, argc, argv) == -1 || init_structs(state) == -1)
+		return (-1);
+	if (init_fork_mutexes(state) == -1)
+		return (-1);
+	if (init_philo_mutexes(state) == -1)
+		return (-1);
+	if (init_dead_mutex(state) == -1)
+		return (-1);
+	return (1);
+}
+
+int	main(int argc, char **argv)
+{
+	t_state		*state;
+	pthread_t	*philo_threads;
+
+	if (args_check(argc, argv) == -1)
+		return (-1);
+	state = (t_state *) malloc(ft_atoi(argv[1]) * sizeof(t_state));
+	if (state == NULL)
+		return (printf("malloc of state failed.\n"), -1);
+	if (init(state, argc, argv) == -1)
+		return (-1);
+	if (init_threads(state, &philo_threads) == -1)
+		return (-1);
+	if (create_threads(state, philo_threads) == -1)
+		return (-1);
+	while (is_program_end(state) == 0)
+	{
+		ft_wait(9000);
+	}
+	wait_for_threads(state, philo_threads);
+	deinit_structs(state);
+	free(state);
+	free(philo_threads);
 	return (0);
 }
