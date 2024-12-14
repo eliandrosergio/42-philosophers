@@ -6,13 +6,13 @@
 /*   By: efaustin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 16:10:29 by efaustin          #+#    #+#             */
-/*   Updated: 2024/12/12 16:11:36 by efaustin         ###   ########.fr       */
+/*   Updated: 2024/12/14 09:21:12 by efaustin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
 
-void	deinit_structs(t_state *state)
+void	cleanup(t_state *state, pthread_t *philo_threads)
 {
 	int	i;
 
@@ -26,11 +26,13 @@ void	deinit_structs(t_state *state)
 	free(state->p_philos);
 	free(state->p_forks);
 	free(state->p_dead);
+	free(state);
+	free(philo_threads);
 }
 
-int	init(t_state *state, int argc, char **argv)
+int	init(t_state *state, int ac, char **av)
 {
-	if (init_arguments(state, argc, argv) == -1 || init_structs(state) == -1)
+	if (init_arguments(state, ac, av) == -1 || init_structs(state) == -1)
 		return (-1);
 	if (init_fork_mutexes(state) == -1)
 		return (-1);
@@ -41,17 +43,17 @@ int	init(t_state *state, int argc, char **argv)
 	return (1);
 }
 
-int	main(int argc, char **argv)
+int	main(int ac, char **av)
 {
 	t_state		*state;
 	pthread_t	*philo_threads;
 
-	if (args_check(argc, argv) == -1)
+	if (args_check(ac, av) == -1)
 		return (-1);
-	state = (t_state *) malloc(ft_atoi(argv[1]) * sizeof(t_state));
+	state = (t_state *) malloc(ft_atoi(av[1]) * sizeof(t_state));
 	if (state == NULL)
-		return (printf("malloc of state failed.\n"), -1);
-	if (init(state, argc, argv) == -1)
+		return (print_erro("malloc of state failed.", 1), -1);
+	if (init(state, ac, av) == -1)
 		return (-1);
 	if (init_threads(state, &philo_threads) == -1)
 		return (-1);
@@ -62,8 +64,6 @@ int	main(int argc, char **argv)
 		ft_wait(9000);
 	}
 	wait_for_threads(state, philo_threads);
-	deinit_structs(state);
-	free(state);
-	free(philo_threads);
+	cleanup(state, philo_threads);
 	return (0);
 }

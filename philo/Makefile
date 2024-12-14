@@ -12,18 +12,19 @@
 
 NAME	= philo
 CC		= cc
-CFLAGS	= -Wall -Wextra -Werror -pthread #-g -fsanitize=thread
+CFLAGS	= -Wall -Wextra -Werror -pthread
 
 SRCS	=   src/main.c \
-			src/philo_routine.c \
-            src/end_program.c \
-			src/fts_thread.c \
-			src/fts_check.c \
-			src/fts_forks.c \
-			src/fts_dead.c \
-			src/fts_init.c \
 			src/fts_aux.c \
-			src/fts_utils.c
+			src/fts_init.c \
+			src/fts_dead.c \
+			src/fts_state.c \
+			src/fts_philo.c \
+			src/fts_forks.c \
+			src/fts_check.c \
+			src/fts_utils.c \
+			src/fts_thread.c \
+            src/fts_program.c
 
 OBJS	= $(SRCS:.c=.o)
 RM		= rm -f

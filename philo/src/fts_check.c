@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   fts_check.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: efaustin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 16:10:29 by efaustin          #+#    #+#             */
-/*   Updated: 2024/12/12 16:11:36 by efaustin         ###   ########.fr       */
+/*   Updated: 2024/12/14 09:21:12 by efaustin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,15 @@
 void	print_argerro(int id)
 {
 	if (id == 1)
-		printf("Invalid number of philosophers (1 - 200)\n");
+		print_erro("Invalid number of philosophers (1 - 200)", 1);
 	else if (id == 2)
-		printf("Invalid number of time_to_die (>= 1)\n");
+		print_erro("Invalid number of time_to_die (>= 60)", 1);
 	else if (id == 3)
-		printf("Invalid number of time_to_eat (>= 1)\n");
+		print_erro("Invalid number of time_to_eat (>= 60)", 1);
 	else if (id == 4)
-		printf("Invalid number of time_to_sleep (>= 1)\n");
+		print_erro("Invalid number of time_to_sleep (>= 60)", 1);
 	else if (id == 5)
-		printf("Invalid number of must_eat_count (>= 1)\n");
+		print_erro("Invalid number of must_eat_count (>= 1)", 1);
 }
 
 int	is_digits(char *str)
@@ -40,18 +40,15 @@ int	is_digits(char *str)
 	return (1);
 }
 
-int	check_number(char *str, int id, int i)
+int	check_number(char *str, int id)
 {
-	while (str[i])
+	if (!is_digits(str))
 	{
-		if (!is_digits(str))
-		{
-			print_argerro(id);
-			return (0);
-		}
-		i++;
+		print_argerro(id);
+		return (0);
 	}
-	if ((ft_atoi(str) <= 0) || (id == 1 && (ft_atoi(str) > 200)))
+	if ((ft_atoi(str) <= 0) || ((id == 1 && (ft_atoi(str) > 200))
+			|| ((id == 2 || id == 3 || id == 4) && (ft_atoi(str) < 60))))
 	{
 		print_argerro(id);
 		return (0);
@@ -66,12 +63,12 @@ int	args_check(int ac, char **av)
 	if (ac == 5 || ac == 6)
 	{
 		i = 1;
-		while (i < ac && check_number(av[i], i, 0))
+		while (i < ac && check_number(av[i], i))
 			i++;
 		if (i != ac)
 			return (-1);
 		return (0);
 	}
-	printf("Invalid number of arguments");
+	print_erro("Invalid number of arguments", 1);
 	return (-1);
 }

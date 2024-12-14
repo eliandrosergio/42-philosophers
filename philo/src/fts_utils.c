@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print_state_change.c                               :+:      :+:    :+:   */
+/*   fts_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: efaustin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 16:10:29 by efaustin          #+#    #+#             */
-/*   Updated: 2024/12/12 16:11:36 by efaustin         ###   ########.fr       */
+/*   Updated: 2024/12/14 09:21:12 by efaustin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,14 +62,14 @@ void	ft_wait(long time_to_sleep)
 	long long		time_begin;
 
 	gettimeofday(&tv, NULL);
-	time_begin = (long long)tv.tv_sec 
+	time_begin = (long long)tv.tv_sec
 		* (long long)1000000 + (long long)tv.tv_usec;
 	time_current = time_begin;
 	while (time_current - time_begin < time_to_sleep)
 	{
 		usleep(20);
 		gettimeofday(&tv, NULL);
-		time_current = (long long)tv.tv_sec 
+		time_current = (long long)tv.tv_sec
 			* (long long)1000000 + (long long)tv.tv_usec;
 	}
 }

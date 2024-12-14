@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   forks.c                                            :+:      :+:    :+:   */
+/*   fts_forks.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: efaustin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 16:10:29 by efaustin          #+#    #+#             */
-/*   Updated: 2024/12/12 16:11:36 by efaustin         ###   ########.fr       */
+/*   Updated: 2024/12/14 09:21:12 by efaustin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,11 @@ static int	quire_forks_without_last(t_state *state)
 	if (is_dead_flag(state) == 0)
 		print_state_change("has taken a fork", state);
 	else
+	{
+		pthread_mutex_unlock(&state->p_forks[state->current_philo_id].mutex);
+		return (0);
+	}
+	if (state->number_of_philosophers == 1)
 	{
 		pthread_mutex_unlock(&state->p_forks[state->current_philo_id].mutex);
 		return (0);
@@ -62,6 +67,14 @@ static int	aquire_forks_last_philo(t_state *state)
 	return (1);
 }
 
+int	acquire_forks(t_state *state)
+{
+	if (state->current_philo_id % 2 == 0)
+		return (quire_forks_without_last(state));
+	else
+		return (aquire_forks_last_philo(state));
+}
+
 void	release_forks(t_state *state)
 {
 	if (state->current_philo_id + 1 == state->number_of_philosophers)
@@ -76,12 +89,4 @@ void	release_forks(t_state *state)
 		pthread_mutex_unlock(&state->p_forks[(state->current_philo_id + 1)
 			% state->number_of_philosophers].mutex);
 	}
-}
-
-int	acquire_forks(t_state *state)
-{
-	if (state->current_philo_id % 2 == 0)
-		return (quire_forks_without_last(state));
-	else
-		return (aquire_forks_last_philo(state));
 }

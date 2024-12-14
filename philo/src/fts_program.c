@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   is_program_end.c                                   :+:      :+:    :+:   */
+/*   fts_program.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: efaustin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 16:10:29 by efaustin          #+#    #+#             */
-/*   Updated: 2024/12/12 16:11:36 by efaustin         ###   ########.fr       */
+/*   Updated: 2024/12/14 09:21:12 by efaustin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static int	is_must_eat_reached(t_state *state, int *must_eat_reached)
 
 static void	set_must_eat_reached(t_state *state, int *must_eat_reached, int i)
 {
-	if (state->number_of_times_each_philosopher_must_eat != 0 
+	if (state->number_of_times_each_philosopher_must_eat != 0
 		&& state[i].p_philos[i].eat_counter
 		< state->number_of_times_each_philosopher_must_eat)
 		*must_eat_reached = 0;
@@ -50,7 +50,8 @@ static int	is_dead(t_state *state, struct timeval *tv,
 			state->p_dead->dead = 1;
 			time_stamp = (long long)tv->tv_sec * (long long)1000000
 				+ (long long)tv->tv_usec - state->start_time;
-			printf("%lli %i died\n", time_stamp / 1000, state[i].p_philos[i].id);
+			printf("%lli %i died\n",
+				time_stamp / 1000, state[i].p_philos[i].id);
 			pthread_mutex_unlock(&state->p_dead->mutex);
 			pthread_mutex_unlock(&state[i].p_philos[i].mutex);
 			return (1);
