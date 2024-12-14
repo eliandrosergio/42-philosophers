@@ -30,5 +30,5 @@ O objetivo é implementar uma solução eficiente e conforme as regras, garantin
    ```bash
    git clone https://github.com/eliandrosergio/philosophers.git
    cd philosophers
+   cd philo
    make
-   ./philo <número_de_filósofos> <tempo_para_morrer> <tempo_para_comer> <tempo_para_pensar> [número_de_vezes_para_comer]
