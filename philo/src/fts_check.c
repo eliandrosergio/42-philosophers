@@ -15,13 +15,13 @@
 void	print_argerro(int id)
 {
 	if (id == 1)
-		print_erro("Invalid number of philosophers (1 - 200)", 1);
+		print_erro("Invalid number of philosophers (>= 1)", 1);
 	else if (id == 2)
-		print_erro("Invalid number of time_to_die (>= 60)", 1);
+		print_erro("Invalid number of time_to_die (>= 1)", 1);
 	else if (id == 3)
-		print_erro("Invalid number of time_to_eat (>= 60)", 1);
+		print_erro("Invalid number of time_to_eat (>= 1)", 1);
 	else if (id == 4)
-		print_erro("Invalid number of time_to_sleep (>= 60)", 1);
+		print_erro("Invalid number of time_to_sleep (>= 1)", 1);
 	else if (id == 5)
 		print_erro("Invalid number of must_eat_count (>= 1)", 1);
 }
@@ -47,8 +47,7 @@ int	check_number(char *str, int id)
 		print_argerro(id);
 		return (0);
 	}
-	if ((ft_atoi(str) <= 0) || ((id == 1 && (ft_atoi(str) > 200))
-			|| ((id == 2 || id == 3 || id == 4) && (ft_atoi(str) < 60))))
+	if (ft_atoi(str) <= 0)
 	{
 		print_argerro(id);
 		return (0);
