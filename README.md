@@ -11,7 +11,7 @@ O objetivo é implementar uma solução eficiente e conforme as regras, garantin
 - Evitem deadlocks e race conditions.
 - Respeitem as condições de término do programa.
 
-- # Vão gostar👌
+### Vão gostar👌
 
 ## Como Compilar e Executar
 
