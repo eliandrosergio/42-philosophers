@@ -1,4 +1,4 @@
-# Philosophers
+# 42-Philosophers
 
 Projeto *Philosophers* desenvolvido como parte do currículo da [Escola 42](https://www.42network.org/).
 
